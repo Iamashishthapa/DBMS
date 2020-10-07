@@ -61,7 +61,7 @@ app.post("/deletepost",(req,res)=>{
 })
 
 //find post
-app.post("/findpost",(req,res)=>{
+app.post("/finditem",(req,res)=>{
     let id = parseInt(req.body.id); 
     let sql = 'SELECT * FROM items where id = ?'
     let query = db.query(sql,id,(err, result)=>{
@@ -69,17 +69,25 @@ app.post("/findpost",(req,res)=>{
         res.send(result)
     })
 })
-//update post 
-// app.post("/updatepost",(req,res)=>{
-//     let post ={id:parseInt(req.body.name),item_name:req.body.name,item_description:req.body.description,price:req.body.price,tag:req.body.tag,image:parseInt(req.body.id),stock:parseInt(req.body.stock)};
-//     console.log(post);
-//     let sql = 'INSERT INTO items SET ?'
-//     let query = db.query(sql, post, (err, result)=>{
-//         if(err) throw err
-//         console.log('yes');
-//         res.send("item added");
-//     })
-// })
+
+app.post("/searchitem",(req,res)=>{
+    let name = req.body.search;
+    let wCharacter='';
+    for(i=0;i<(name.length);i++){
+        if(name[i]!="%"){
+        wCharacter=wCharacter.concat("%",name[i]);
+        }
+        else if(name[i]=="%"){
+            i=i+2;
+        }
+    }
+    wCharacter=wCharacter.concat("%");
+    let sql = 'SELECT * FROM items where item_name like ?'
+    let query = db.query(sql,wCharacter,(err, result)=>{
+        if(err) throw err
+        res.send(result)
+    })
+})
 
 //update post
 app.post("/updatepost",(req,res)=>{
@@ -95,12 +103,30 @@ app.post("/updatepost",(req,res)=>{
 
 app.get("/addonepost",(req,res)=>{
     let post ={id:1,item_name:"Samsung",item_description:"Samsung Phone",price:900,tag:"Phone",image:1,stock:6};
-    console.log(post);
     let sql = 'INSERT INTO items SET ?'
     let query = db.query(sql, post, (err, result)=>{
         if(err) throw err
-        console.log('yes');
         res.send("1 item added");
+    })
+})
+
+app.post('/createuser',(req,res)=>{
+    let user={email:req.body.email,name:req.body.name,pass:req.body.pass,address:req.body.address,phone:req.body.phone}
+    let sql = 'INSERT INTO accounts SET ?'
+    let query = db.query(sql,user,(err,result)=>{
+        if(err) res.send([])
+        res.send(user.email)
+    })
+})
+app.post('/login',(req,res)=>{
+    let user={email:req.body.email,pass:req.body.pass}
+    let sql=`SELECT * FROM accounts WHERE email='${user.email}' AND pass='${user.pass}'`
+    let query=db.query(sql,(err,result)=>{
+        if(err) res.send([])
+        var string=JSON.stringify(result);
+        var json =  JSON.parse(string);
+        console.log(json[0].name);
+        res.send(json[0].name)
     })
 })
 
