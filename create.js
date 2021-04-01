@@ -13,5 +13,5 @@ con.connect(function(err) {
     con.query("CREATE DATABASE mydb1", function (err, result) {
       if (err) throw err;
       console.log("Database created");
-    });
+      });
   });
