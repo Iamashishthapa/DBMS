@@ -1,0 +1,15 @@
+.main{
+    text-align: center;
+}
+.updatebox{
+    border-color: #343a40;
+    border-style: solid;
+    width: 400px;
+    margin:40px auto;
+    display: inline-block;
+    text-align: center;
+}
+.updatebox input{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

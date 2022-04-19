@@ -1,0 +1,9 @@
+input,.login,select{
+    width: 50%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    display:block;
+  }
+  .post{margin-left: 30%;}
